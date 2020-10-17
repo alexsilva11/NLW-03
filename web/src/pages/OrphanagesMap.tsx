@@ -18,6 +18,17 @@ interface Orphanage {
 
 function Orfanatos() {
 
+    const [longitude, setLongitude] = useState(0);
+    const [latitude, setLatitude] = useState(0);
+
+
+    navigator.geolocation.getCurrentPosition(position => {
+        setLongitude(position.coords.longitude)
+        setLatitude(position.coords.latitude)
+    })
+    console.log(longitude, latitude)
+
+
     const [orphanages, setOrphanages] = useState<Orphanage[]>([])
 
     useEffect(() => {
@@ -43,7 +54,7 @@ function Orfanatos() {
             </aside>
 
             <Map
-                center={[-23.4493382, -46.5839127]}
+                center={[latitude, longitude]}
                 zoom={15}
                 style={{ width: '100%', height: '100%' }}>
                 <TileLayer url={`https://api.mapbox.com/styles/v1/mapbox/streets-v10/tiles/256/{z}/{x}/{y}@2x?access_token=${process.env.REACT_APP_MAPBOX_TOKEN}`} />

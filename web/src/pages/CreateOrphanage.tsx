@@ -22,6 +22,7 @@ export default function CreateOrphanage() {
   const [opening_hours, setOpeningHours] = useState('');
   const [open_on_weekends, setOpenOnWeekends] = useState(true);
   const [images, setImages] = useState<File[]>([]);
+  const [whatsapp, setWhatsapp] = useState('')
   const [previewImages, setPreviewimages] = useState<string[]>([])
 
 
@@ -65,7 +66,8 @@ export default function CreateOrphanage() {
     data.append('instructions', instructions);
     data.append('opening_hours', opening_hours);
     data.append('open_on_weekends', String(open_on_weekends));
-    
+    data.append('whatsapp', String(whatsapp));
+
     images.forEach(image => {
       data.append('images', image)
     })
@@ -73,7 +75,7 @@ export default function CreateOrphanage() {
     api.post('orphanages', data)
 
     alert('Cadastro realizado com sucesso')
-    
+
     history.push('/app')
   }
 
@@ -110,9 +112,19 @@ export default function CreateOrphanage() {
 
             <div className="input-block">
               <label htmlFor="name">Nome</label>
-              <input id="name"
+              <input
+                id="name"
                 value={name}
                 onChange={(evt) => setName(evt.target.value)}
+              />
+            </div>
+
+            <div className="input-block">
+              <label htmlFor="whatsapp">Whatsapp</label>
+              <input
+                id="whatsapp"
+                value={whatsapp}
+                onChange={(evt) => setWhatsapp(evt.target.value)}
               />
             </div>
 

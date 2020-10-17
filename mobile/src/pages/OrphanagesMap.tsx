@@ -4,7 +4,8 @@ import MapView, { Marker, Callout, PROVIDER_GOOGLE } from 'react-native-maps';
 import { Feather } from '@expo/vector-icons';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import { RectButton } from 'react-native-gesture-handler';
-
+import { requestPermissionsAsync, getCurrentPositionAsync } from 'expo-location'
+ 
 import mapMarker from '../images/map-marker.png';
 import api from '../services/api';
 
@@ -16,6 +17,29 @@ interface Orphanage {
 }
 
 export default function OrphangesMap() {
+
+  const [longitude, setLongitude] = useState(-46.5835547);
+  const [latitude, setLatitude] = useState(-23.4445259);
+
+
+  useEffect(() => {
+    async function loadInitialPosition() {
+      const {granted} = await requestPermissionsAsync();
+
+      if(granted) {
+        const { coords } = await getCurrentPositionAsync();
+
+        const { latitude, longitude } = coords;
+
+        setLatitude(latitude);
+        setLongitude(longitude);
+      }
+    }
+
+    loadInitialPosition();
+  }, [])
+
+
   const [orphanages, setOrphanages] = useState<Orphanage[]>([]);
   const navigation = useNavigation();
 
@@ -39,8 +63,8 @@ export default function OrphangesMap() {
         provider={PROVIDER_GOOGLE}
         style={styles.map}
         initialRegion={{
-          latitude: -23.4445259,
-          longitude: -46.5835547,
+          latitude: latitude,
+          longitude: longitude,
           latitudeDelta: 0.008,
           longitudeDelta: 0.008
         }}>
